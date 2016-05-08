@@ -26,7 +26,7 @@ module Aws
       when Resources::Definition then definition
       when Hash then Resources::Definition.new(definition)
       when String
-        Resources::Definition.new(Json.load_file(definition), source_path: definition)
+        Resources::Definition.new(Json.load_file(definition), :source_path => definition)
       else raise ArgumentError, "invalid resource definition #{definition}"
     end
     definition.apply(svc_module)
@@ -66,22 +66,22 @@ module Aws
           'unmonitor' => 'batch_unmonitor',
         }.each do |deprecated_name, name|
           Resources::Operations::DeprecatedOperation.define({
-            resource_class: EC2::Instance,
-            deprecated_name: deprecated_name,
-            name: name,
+            :resource_class => EC2::Instance,
+            :deprecated_name => deprecated_name,
+            :name => name,
           })
         end
         Resources::Operations::DeprecatedOperation.define({
-          resource_class: EC2::Tag,
-          deprecated_name: 'delete',
-          name: 'batch_delete!',
+          :resource_class => EC2::Tag,
+          :deprecated_name => 'delete',
+          :name => 'batch_delete!',
         })
       when 'S3'
         [S3::Object, S3::ObjectSummary, S3::ObjectVersion].each do |klass|
           Resources::Operations::DeprecatedOperation.define({
-            resource_class: klass,
-            deprecated_name: 'delete',
-            name: 'batch_delete!',
+            :resource_class => klass,
+            :deprecated_name => 'delete',
+            :name => 'batch_delete!',
           })
         end
       end
